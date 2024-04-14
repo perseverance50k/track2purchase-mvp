@@ -1,0 +1,11 @@
+{
+  "name": "track2purchase-mvp",
+  "version": "1.0.0",
+  "description": "App that helps users to navigate their way towards confident buying decisions without any doubts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Serhii Chernikov",
+  "license": "MIT"
+}
