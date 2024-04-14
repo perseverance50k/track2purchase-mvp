@@ -2,10 +2,10 @@
   "name": "track2purchase-mvp",
   "version": "1.0.0",
   "description": "App that helps users to navigate their way towards confident buying decisions without any doubts.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "dev:start": "node index.js",
-    "dev:start:watch": "nodemon index.js",
+    "dev:start": "node src/index.js",
+    "dev:start:watch": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Serhii Chernikov",
