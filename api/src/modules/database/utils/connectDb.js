@@ -16,4 +16,8 @@ const connectDb = async () => {
   }
 };
 
-module.exports = { db, connectDb };
+const getDb = () => {
+  return db;
+};
+
+module.exports = { connectDb, getDb };
