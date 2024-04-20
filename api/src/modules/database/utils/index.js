@@ -1,1 +1,1 @@
-module.exports = { ...require("./connectDb") };
+module.exports = { ...require("./connectDb"), ...require("./getCollection") };
