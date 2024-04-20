@@ -6,6 +6,7 @@
   "scripts": {
     "dev:start": "node src/index.js",
     "dev:start:watch": "nodemon src/index.js",
+    "prettier": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Serhii Chernikov",

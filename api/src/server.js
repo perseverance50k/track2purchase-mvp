@@ -1,6 +1,6 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
 // Creates an Express application
 const app = express();
@@ -12,10 +12,10 @@ app.use(bodyParser.json());
 // Uses middleware for handling the Cross-Origin Resource Sharing requests.
 app.use(cors());
 
-app.get('/', (_req, res) => {
-    res.send('Hello from Track2Purchase!:)');
-})
+app.get("/", (_req, res) => {
+  res.send("Hello from Track2Purchase!:)");
+});
 
 app.listen(PORT, () => {
-    console.log(`The server is listening on port ${PORT}`);
-})
+  console.log(`The server is listening on port ${PORT}`);
+});
