@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
+const { connectDb } = require("./modules/database");
+
 // Creates an Express application
 const app = express();
 const PORT = process.env.PORT || 9000;
@@ -16,6 +18,16 @@ app.get("/", (_req, res) => {
   res.send("Hello from Track2Purchase!:)");
 });
 
-app.listen(PORT, () => {
-  console.log(`The server is listening on port ${PORT}`);
-});
+const startServer = async () => {
+  try {
+    await connectDb();
+
+    app.listen(PORT, () => {
+      console.log(`The server is listening on port ${PORT}`);
+    });
+  } catch (e) {
+    console.error("Unable to start the server: ", e);
+  }
+};
+
+module.exports = { startServer };
