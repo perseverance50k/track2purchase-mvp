@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const { connectDb } = require("./modules/database");
 const { authRouter } = require("./modules/auth");
+const { errorHandler } = require("./middleware");
 
 // Creates an Express application
 const app = express();
@@ -17,9 +18,8 @@ app.use(cors());
 
 app.use("/auth", authRouter);
 
-app.get("/", (_req, res) => {
-  res.send("Hello from Track2Purchase!:)");
-});
+// IMPORTANT: this middleware must be the last among all app.use() and route calls
+app.use(errorHandler);
 
 const startServer = async () => {
   try {

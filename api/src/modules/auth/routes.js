@@ -10,7 +10,8 @@ const router = express.Router();
 
 const USERS_COLLECTION = "users";
 
-router.post("/register", async (req, res) => {
+// --- REGISTRATION ---
+router.post("/register", async (req, res, next) => {
   const credentials = req.body;
   const collection = getCollection(USERS_COLLECTION);
 
@@ -25,22 +26,27 @@ router.post("/register", async (req, res) => {
     return;
   }
 
-  const isUserExist = await collection.findOne({ email: credentials.email });
+  try {
+    const isUserExist = await collection.findOne({ email: credentials.email });
 
-  if (isUserExist) {
-    const payload = {
-      error: "Such a user already exist!",
-    };
+    if (isUserExist) {
+      const payload = {
+        error: "Such a user already exist!",
+      };
 
-    res.send(payload).status(403);
-    return;
+      res.send(payload).status(403);
+      return;
+    }
+
+    const result = await collection.insertOne(credentials);
+    res.send(result).status(201);
+  } catch (e) {
+    next(e);
   }
-
-  const result = await collection.insertOne(credentials);
-  res.send(result).status(201);
 });
 
-router.post("/login", async (req, res) => {
+// --- LOGIN ---
+router.post("/login", async (req, res, next) => {
   const credentials = req.body;
   const collection = getCollection(USERS_COLLECTION);
 
@@ -56,22 +62,27 @@ router.post("/login", async (req, res) => {
   }
 
   const { email, password } = credentials;
-  const user = await collection.findOne({ email });
 
-  if (!user || user.password !== password) {
+  try {
+    const user = await collection.findOne({ email });
+
+    if (!user || user.password !== password) {
+      const payload = {
+        error: "Incorrect credentials provided!",
+      };
+
+      res.send(payload).status(403);
+      return;
+    }
+
     const payload = {
-      error: "Incorrect credentials provided!",
+      success: "Successfully logged in!",
     };
 
-    res.send(payload).status(403);
-    return;
+    res.send(payload).status(200);
+  } catch (e) {
+    next(e);
   }
-
-  const payload = {
-    success: "Successfully logged in!",
-  };
-
-  res.send(payload).status(200);
 });
 
 module.exports = router;
