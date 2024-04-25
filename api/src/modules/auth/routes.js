@@ -1,7 +1,10 @@
 const express = require("express");
 
 const { getCollection } = require("../database");
-const { userSchema } = require("../user");
+const {
+  login: loginValidationSchema,
+  registration: registrationValidationSchema,
+} = require("./validation");
 
 const router = express.Router();
 
@@ -11,7 +14,7 @@ router.post("/register", async (req, res) => {
   const credentials = req.body;
   const collection = getCollection(USERS_COLLECTION);
 
-  const validationResult = userSchema.validate(credentials);
+  const validationResult = registrationValidationSchema.validate(credentials);
 
   if (validationResult.error) {
     const payload = {
@@ -41,7 +44,7 @@ router.post("/login", async (req, res) => {
   const credentials = req.body;
   const collection = getCollection(USERS_COLLECTION);
 
-  const validationResult = userSchema.validate(credentials);
+  const validationResult = loginValidationSchema.validate(credentials);
 
   if (validationResult.error) {
     const payload = {
