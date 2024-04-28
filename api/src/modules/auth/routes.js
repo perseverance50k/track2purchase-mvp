@@ -1,11 +1,14 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 
-const { getCollection } = require("../database");
 const {
   login: loginValidationSchema,
   registration: registrationValidationSchema,
 } = require("./validation");
+
+const { getCollection } = require("../database");
+
+const { sendErrorResponse } = require("../../utils");
 
 const router = express.Router();
 
@@ -20,11 +23,7 @@ router.post("/register", async (req, res, next) => {
   const validationResult = registrationValidationSchema.validate(credentials);
 
   if (validationResult.error) {
-    const payload = {
-      error: "Incorrect credentials provided!",
-    };
-
-    res.send(payload).status(400);
+    sendErrorResponse(res, "Incorrect credentials provided!", 400);
     return;
   }
 
@@ -32,35 +31,21 @@ router.post("/register", async (req, res, next) => {
     const isUserExist = await collection.findOne({ email: credentials.email });
 
     if (isUserExist) {
-      const payload = {
-        error: "Such a user already exist!",
-      };
-
-      res.send(payload).status(403);
+      sendErrorResponse(res, "Incorrect credentials provided!", 403);
       return;
     }
 
     bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
       if (err) {
         console.err(err);
-
-        const payload = {
-          error: "Error occurred while creating a user!",
-        };
-
-        res.send(payload).status(500);
+        sendErrorResponse(res, "Error occurred while creating a user!", 500);
         return;
       }
 
       bcrypt.hash(credentials.password, salt, async (err, hash) => {
         if (err) {
           console.err(err);
-
-          const payload = {
-            error: "Error occurred while creating a user!",
-          };
-
-          res.send(payload).status(500);
+          sendErrorResponse(res, "Error occurred while creating a user!", 500);
           return;
         }
 
@@ -86,11 +71,7 @@ router.post("/login", async (req, res, next) => {
   const validationResult = loginValidationSchema.validate(credentials);
 
   if (validationResult.error) {
-    const payload = {
-      error: "Incorrect credentials provided!",
-    };
-
-    res.send(payload).status(400);
+    sendErrorResponse(res, "Incorrect credentials provided!", 400);
     return;
   }
 
@@ -100,21 +81,18 @@ router.post("/login", async (req, res, next) => {
     const user = await collection.findOne({ email });
 
     if (!user) {
-      const payload = {
-        error: "Incorrect credentials provided!",
-      };
-
-      res.send(payload).status(403);
+      sendErrorResponse(res, "Incorrect credentials provided!", 403);
       return;
     }
 
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) {
-        const payload = {
-          error: "Error occurred while authenticating a user!",
-        };
-
-        res.send(payload).status(500);
+        sendErrorResponse(
+          res,
+          "Error occurred while authenticating a user!",
+          500
+        );
+        return;
       }
 
       if (result) {
@@ -124,11 +102,7 @@ router.post("/login", async (req, res, next) => {
 
         res.send(payload).status(200);
       } else {
-        const payload = {
-          error: "Incorrect credentials provided!",
-        };
-
-        res.send(payload).status(403);
+        sendErrorResponse(res, "Incorrect credentials provided!", 403);
       }
     });
   } catch (e) {
