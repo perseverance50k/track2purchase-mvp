@@ -9,8 +9,8 @@ router.post("/register", async (req, res, next) => {
   const credentials = req.body;
 
   try {
-    const created = await addUser(credentials);
-    res.send(created).status(201);
+    await addUser(credentials);
+    res.send({ success: true }).status(201);
   } catch (e) {
     next(e);
   }
@@ -21,7 +21,7 @@ router.post("/login", async (req, res, next) => {
   const credentials = req.body;
 
   try {
-    const verified = verifyUser(credentials);
+    const verified = await verifyUser(credentials);
     res.send(verified).status(200);
   } catch (e) {
     next(e);

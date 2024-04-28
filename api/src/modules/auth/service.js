@@ -40,7 +40,7 @@ const add = async (credentials) => {
         password: hash,
       };
 
-      return collection.insertOne(userWithHashedPassword);
+      collection.insertOne(userWithHashedPassword);
     });
   });
 };
@@ -66,13 +66,15 @@ const verify = async (credentials) => {
       throw new Error("Error occurred while authenticating a user!");
     }
 
-    if (result) {
-      delete user.password;
-      res.send(user).status(200);
-    } else {
+    if (!result) {
       throw new Error("Incorrect credentials provided!");
     }
   });
+
+  delete user.password;
+  delete user._id;
+
+  return user;
 };
 
 module.exports = {
