@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const { connectDb } = require("./modules/database");
+const { authRouter } = require("./modules/auth");
+const { errorHandler } = require("./middleware");
 
 // Creates an Express application
 const app = express();
@@ -14,9 +16,10 @@ app.use(bodyParser.json());
 // Uses middleware for handling the Cross-Origin Resource Sharing requests.
 app.use(cors());
 
-app.get("/", (_req, res) => {
-  res.send("Hello from Track2Purchase!:)");
-});
+app.use("/auth", authRouter);
+
+// IMPORTANT: this middleware must be the last among all app.use() and route calls
+app.use(errorHandler);
 
 const startServer = async () => {
   try {
