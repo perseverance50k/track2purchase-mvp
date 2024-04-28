@@ -7,6 +7,9 @@ const {
 
 const { getCollection } = require("../database");
 
+const USERS_COLLECTION = "users";
+const SALT_ROUNDS = +process.env.SALT_ROUNDS || 10;
+
 const add = async (credentials) => {
   const collection = getCollection(USERS_COLLECTION);
 
