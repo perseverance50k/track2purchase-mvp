@@ -20,6 +20,7 @@ router.post("/register", async (req, res, next) => {
 // --- LOGIN ---
 router.post("/login", async (req, res, next) => {
   const credentials = req.body;
+  const cookies = req.cookies;
 
   try {
     const verified = await verifyUser(credentials);
