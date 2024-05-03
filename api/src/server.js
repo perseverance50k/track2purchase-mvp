@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const { connectDb } = require("./modules/database");
 const { authRouter } = require("./modules/auth");
@@ -15,6 +16,7 @@ const PORT = process.env.PORT || 9000;
 app.use(bodyParser.json());
 // Uses middleware for handling the Cross-Origin Resource Sharing requests.
 app.use(cors());
+app.use(cookieParser());
 
 app.use("/auth", authRouter);
 
