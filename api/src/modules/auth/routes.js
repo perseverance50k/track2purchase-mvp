@@ -1,4 +1,5 @@
 const express = require("express");
+const httpStatus = require("http-status");
 
 const { add: addUser, verify: verifyUser } = require("./service");
 
@@ -10,7 +11,7 @@ router.post("/register", async (req, res, next) => {
 
   try {
     await addUser(credentials);
-    res.send({ success: true }).status(201);
+    res.send({ success: true }).status(httpStatus.CREATED);
   } catch (e) {
     next(e);
   }
@@ -22,7 +23,7 @@ router.post("/login", async (req, res, next) => {
 
   try {
     const verified = await verifyUser(credentials);
-    res.send(verified).status(200);
+    res.send(verified).status(httpStatus.OK);
   } catch (e) {
     next(e);
   }
