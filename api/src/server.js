@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 
 const { connectDb } = require("./modules/database");
 const { authRouter } = require("./modules/auth");
-const { errorHandler } = require("./middleware");
+const { errorHandler, authHandler } = require("./middleware");
 
 // Creates an Express application
 const app = express();
@@ -19,6 +19,9 @@ app.use(cors());
 app.use(cookieParser());
 
 app.use("/auth", authRouter);
+
+// IMPORTANT: this middleware must go after the /auth routes, but before and secure routes
+app.use(authHandler);
 
 // IMPORTANT: this middleware must be the last among all app.use() and route calls
 app.use(errorHandler);
