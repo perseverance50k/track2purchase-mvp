@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use("/auth", authRouter);
 
-// IMPORTANT: this middleware must go after the /auth routes, but before and secure routes
+// IMPORTANT: this middleware must go after the /auth routes, but before secure routes
 app.use(authHandler);
 
 // IMPORTANT: this middleware must be the last among all app.use() and route calls
