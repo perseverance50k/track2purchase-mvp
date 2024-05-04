@@ -32,7 +32,15 @@ const add = async (credentials) => {
     password: hashedPassword,
   };
 
-  collection.insertOne(userWithHashedPassword);
+  const response = await collection.insertOne(userWithHashedPassword);
+
+  const userWithIdButWithoutPassword = {
+    _id: response.insertedId,
+    ...credentials,
+    password: undefined,
+  };
+
+  return userWithIdButWithoutPassword;
 };
 
 const verify = async (credentials) => {
