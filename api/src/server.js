@@ -1,10 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const { connectDb } = require("./modules/database");
 const { authRouter } = require("./modules/auth");
-const { errorHandler } = require("./middleware");
+const { errorHandler, authHandler } = require("./middleware");
 
 // Creates an Express application
 const app = express();
@@ -15,8 +16,12 @@ const PORT = process.env.PORT || 9000;
 app.use(bodyParser.json());
 // Uses middleware for handling the Cross-Origin Resource Sharing requests.
 app.use(cors());
+app.use(cookieParser());
 
 app.use("/auth", authRouter);
+
+// IMPORTANT: this middleware must go after the /auth routes, but before secure routes
+app.use(authHandler);
 
 // IMPORTANT: this middleware must be the last among all app.use() and route calls
 app.use(errorHandler);

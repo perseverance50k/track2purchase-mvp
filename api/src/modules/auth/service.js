@@ -25,24 +25,22 @@ const add = async (credentials) => {
     throw new Error("Incorrect credentials provided!");
   }
 
-  bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
-    if (err) {
-      throw new Error("Error occurred while creating a user!");
-    }
+  const hashedPassword = await bcrypt.hash(credentials.password, SALT_ROUNDS);
 
-    bcrypt.hash(credentials.password, salt, async (err, hash) => {
-      if (err) {
-        throw new Error("Error occurred while creating a user!");
-      }
+  const userWithHashedPassword = {
+    ...credentials,
+    password: hashedPassword,
+  };
 
-      const userWithHashedPassword = {
-        ...credentials,
-        password: hash,
-      };
+  const response = await collection.insertOne(userWithHashedPassword);
 
-      collection.insertOne(userWithHashedPassword);
-    });
-  });
+  const userWithIdButWithoutPassword = {
+    _id: response.insertedId,
+    ...credentials,
+    password: undefined,
+  };
+
+  return userWithIdButWithoutPassword;
 };
 
 const verify = async (credentials) => {
@@ -61,15 +59,11 @@ const verify = async (credentials) => {
     throw new Error("Incorrect credentials provided!");
   }
 
-  bcrypt.compare(password, user.password, (err, result) => {
-    if (err) {
-      throw new Error("Error occurred while authenticating a user!");
-    }
+  const passwordsMatch = await bcrypt.compare(password, user.password);
 
-    if (!result) {
-      throw new Error("Incorrect credentials provided!");
-    }
-  });
+  if (!passwordsMatch) {
+    throw new Error("Error occurred while authenticating a user!");
+  }
 
   delete user.password;
   delete user._id;
