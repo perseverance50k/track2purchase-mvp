@@ -43,4 +43,14 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+// --- LOGOUT ---
+router.post("/logout", (_req, res, _next) => {
+  const payload = {
+    success: true,
+  };
+
+  res.clearCookie("Authentication");
+  res.send(payload).status(httpStatus.OK);
+});
+
 module.exports = router;

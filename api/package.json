@@ -4,8 +4,8 @@
   "description": "App that helps users to navigate their way towards confident buying decisions without any doubts.",
   "main": "src/index.js",
   "scripts": {
-    "dev:start": "node src/index.js",
-    "dev:start:watch": "nodemon src/index.js",
+    "start:dev": "node src/index.js",
+    "start:dev:watch": "nodemon src/index.js",
     "prettier": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
